@@ -1,4 +1,8 @@
 package com.hakancskn.havadurumu.viewmodel
 
-class LocationViewModel {
+import androidx.lifecycle.ViewModel
+
+
+class LocationViewModel:ViewModel() {
+
 }

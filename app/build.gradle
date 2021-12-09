@@ -33,9 +33,11 @@ android {
 
 dependencies {
 
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def lifeCycleExtensionVersion = '1.1.1'
     def retrofitVersion = '2.4.0'
     def navVersion = '2.3.5'
+    def rxJavaVersion = '2.2.19'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
@@ -56,4 +58,7 @@ dependencies {
 
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
+
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 }
