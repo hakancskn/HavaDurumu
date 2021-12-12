@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel : BaseViewModel() {
 
     val autoCompleteList = MutableLiveData<List<AutoComplete>>()
     val autoCompleteListError = MutableLiveData<Boolean>()

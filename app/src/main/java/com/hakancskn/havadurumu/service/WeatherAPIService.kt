@@ -2,6 +2,8 @@ package com.hakancskn.havadurumu.service
 
 import com.google.gson.GsonBuilder
 import com.hakancskn.havadurumu.model.AutoComplete
+import com.hakancskn.havadurumu.model.Forecasts
+import com.hakancskn.havadurumu.model.LocationKey
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -25,4 +27,13 @@ class WeatherAPIService {
     fun getAutoComplete(query: String): Single<List<AutoComplete>> {
         return api.getAutoComplete(apikey = API_KEY, query = query)
     }
+
+    fun getLocationKey(query: String): Single<LocationKey> {
+        return api.getLocationKeyForLocation(apikey = API_KEY, query = query)
+    }
+
+    fun getForecasts(locationKey: LocationKey): Single<Forecasts> {
+        return api.get5DaysForecasts(apikey = API_KEY, locationKey = locationKey.key.toString())
+    }
+
 }

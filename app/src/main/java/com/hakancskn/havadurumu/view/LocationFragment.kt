@@ -5,14 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.hakancskn.havadurumu.R
+import com.hakancskn.havadurumu.model.Forecasts
+import com.hakancskn.havadurumu.util.locationToLocationQuery
 import com.hakancskn.havadurumu.viewmodel.LocationViewModel
 
 
 class LocationFragment : Fragment() {
 
-    private lateinit var viewModel : LocationViewModel
+    private lateinit var viewModel: LocationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,21 +28,44 @@ class LocationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_location, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeLiveData()
 
-        viewModel = ViewModelProviders.of(this).get(LocationViewModel::class.java)
+    }
 
+    private fun observeLiveData() {
+        viewModel = ViewModelProvider(requireActivity()).get(LocationViewModel::class.java)
+        viewModel.locationLiveData.observe(viewLifecycleOwner, Observer { location ->
+            location?.let {
+
+                viewModel.getLocationKey(query = locationToLocationQuery(location))
+            }
+        })
+
+        viewModel.locationKeyLiveData.observe(viewLifecycleOwner, Observer { locationKey ->
+            locationKey?.let {
+              viewModel.getForecasts(locationKey = locationKey)
+            }
+        }
+        )
+
+        viewModel.forecastsLiveData.observe(viewLifecycleOwner, Observer { forecasts ->
+            forecasts?.let {
+               prepareUI(forecasts)
+            }
+        }
+        )
 
 
     }
 
-    fun setSearchNavigation(){
+    private fun prepareUI(forecasts: Forecasts){
 
     }
+
 
 }
