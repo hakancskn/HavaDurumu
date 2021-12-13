@@ -33,7 +33,7 @@ class WeatherAPIService {
     }
 
     fun getForecasts(locationKey: LocationKey): Single<Forecasts> {
-        return api.get5DaysForecasts(apikey = API_KEY, locationKey = locationKey.key.toString())
+        return api.get5DaysForecasts(apikey = API_KEY, locationKey = locationKey.key.toString(),language= "tr-tr")
     }
 
 }

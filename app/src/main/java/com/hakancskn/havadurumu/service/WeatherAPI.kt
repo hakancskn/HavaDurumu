@@ -25,6 +25,7 @@ interface WeatherAPI {
     fun get5DaysForecasts(
         @Path("key") locationKey: String ="",
         @Query("apikey") apikey:String = "",
+        @Query("language") language:String = ""
     ):Single<Forecasts>
 
 

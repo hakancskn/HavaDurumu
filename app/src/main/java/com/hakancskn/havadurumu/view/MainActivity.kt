@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        getLocation()
         viewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
+        getLocation()
+
     }
 
     private fun getLocation() {
