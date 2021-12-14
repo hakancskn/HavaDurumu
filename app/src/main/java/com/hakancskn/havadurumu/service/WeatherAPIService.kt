@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class WeatherAPIService {
     private val BASE_URL = "http://dataservice.accuweather.com/"
-    private val API_KEY = "CbXGFtPT5Yowm1ODnfCdNNwfA9cfoIaf"
+    private val API_KEY = "LYe1ss69qycdWh64bIqNhA3Mgw7bBEhT"
 
     private var gson = GsonBuilder()
         .setLenient()
@@ -34,6 +34,10 @@ class WeatherAPIService {
 
     fun getForecasts(locationKey: LocationKey): Single<Forecasts> {
         return api.get5DaysForecasts(apikey = API_KEY, locationKey = locationKey.key.toString(),language= "tr-tr")
+    }
+
+    fun getForecasts(locationKey:String):Single<Forecasts> {
+        return api.get5DaysForecasts(apikey = API_KEY, locationKey = locationKey,language= "tr-tr")
     }
 
 }

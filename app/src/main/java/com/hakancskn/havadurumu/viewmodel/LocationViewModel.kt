@@ -63,4 +63,27 @@ class LocationViewModel : BaseViewModel() {
 
 
     }
+
+    fun getForecasts(locationKey: String) {
+        locationLoading.value = true
+        disposable.add(
+            weatherAPIService.getForecasts(locationKey)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<Forecasts>() {
+                    override fun onError(e: Throwable) {
+                        locationLoading.value = false
+                        locationError.value = true
+                    }
+
+                    override fun onSuccess(t: Forecasts) {
+                        locationLoading.value = false
+                        forecastsLiveData.value = t
+                    }
+                })
+        )
+
+
+    }
+
 }

@@ -12,6 +12,11 @@
         <action
             android:id="@+id/action_locationFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <argument
+            android:name="locationKey"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

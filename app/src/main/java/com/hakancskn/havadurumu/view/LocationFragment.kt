@@ -22,6 +22,7 @@ class LocationFragment : Fragment() {
 
     private lateinit var viewModel: LocationViewModel
     private val forecastAdapter = ForecastAdapter(arrayListOf())
+    private var locationKey: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,16 @@ class LocationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            locationKey = LocationFragmentArgs.fromBundle(it).locationKey
+        }
+
+
         observeLiveData()
+
+        if (!locationKey.equals("0")) {
+            viewModel.getForecasts(locationKey = locationKey!!)
+        }
 
         forecast_list.layoutManager = LinearLayoutManager(context)
         forecast_list.adapter = forecastAdapter
@@ -62,14 +72,16 @@ class LocationFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity()).get(LocationViewModel::class.java)
         viewModel.locationLiveData.observe(viewLifecycleOwner, Observer { location ->
             location?.let {
-
-                viewModel.getLocationKey(query = locationToLocationQuery(location))
+                if (locationKey.equals("0"))
+                    viewModel.getLocationKey(query = locationToLocationQuery(location))
             }
         })
 
         viewModel.locationKeyLiveData.observe(viewLifecycleOwner, Observer { locationKey ->
             locationKey?.let {
-                viewModel.getForecasts(locationKey = locationKey)
+                if (this.locationKey.equals("0")) {
+                    viewModel.getForecasts(locationKey = locationKey)
+                }
             }
         }
         )

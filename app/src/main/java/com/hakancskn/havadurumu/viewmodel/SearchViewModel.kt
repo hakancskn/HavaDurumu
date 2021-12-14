@@ -1,9 +1,10 @@
 package com.hakancskn.havadurumu.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.hakancskn.havadurumu.model.AutoComplete
 import com.hakancskn.havadurumu.service.WeatherAPIService
+import com.hakancskn.havadurumu.util.getLocationKeys
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -41,6 +42,12 @@ class SearchViewModel : BaseViewModel() {
 
 
     }
+
+    fun getSharedPreferencesSearchData(context: Context){
+        autoCompleteList.value = getLocationKeys(context)
+    }
+
+
 
 }
 
