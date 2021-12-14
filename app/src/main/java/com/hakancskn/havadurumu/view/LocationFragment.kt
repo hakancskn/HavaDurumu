@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hakancskn.havadurumu.R
 import com.hakancskn.havadurumu.adapter.ForecastAdapter
 import com.hakancskn.havadurumu.model.Forecasts
-import com.hakancskn.havadurumu.util.locationToLocationQuery
+import com.hakancskn.havadurumu.util.*
 import com.hakancskn.havadurumu.viewmodel.LocationViewModel
 import kotlinx.android.synthetic.main.fragment_location.*
 
@@ -23,10 +23,24 @@ class LocationFragment : Fragment() {
     private lateinit var viewModel: LocationViewModel
     private val forecastAdapter = ForecastAdapter(arrayListOf())
     private var locationKey: String? = null
+    var isMetric: Boolean = false
+    var language: String = "tr-tr"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        getSetting()
+
+    }
+
+    fun getSetting(){
+        isMetric = isMetric(requireContext())
+        if (isLanguageTr(requireContext())) {
+            language = "tr-tr"
+        } else {
+            language = "en-us"
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -39,6 +53,14 @@ class LocationFragment : Fragment() {
             val action = LocationFragmentDirections.actionLocationFragmentToSearchFragment()
             this.view?.let { Navigation.findNavController(it).navigate(action) }
             return true
+        } else if (item.itemId == R.id.menu_language) {
+            changeLanguage(requireContext())
+            getSetting()
+            viewModel.getForecasts(locationKey = getLocationKey(),isMetric,language)
+        } else if (item.itemId == R.id.menu_metric) {
+            changeMetric(requireContext())
+            getSetting()
+            viewModel.getForecasts(locationKey = getLocationKey(),isMetric,language)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -60,7 +82,7 @@ class LocationFragment : Fragment() {
         observeLiveData()
 
         if (!locationKey.equals("0")) {
-            viewModel.getForecasts(locationKey = locationKey!!)
+            viewModel.getForecasts(locationKey = locationKey!!, isMetric, language)
         }
 
         forecast_list.layoutManager = LinearLayoutManager(context)
@@ -80,7 +102,7 @@ class LocationFragment : Fragment() {
         viewModel.locationKeyLiveData.observe(viewLifecycleOwner, Observer { locationKey ->
             locationKey?.let {
                 if (this.locationKey.equals("0")) {
-                    viewModel.getForecasts(locationKey = locationKey)
+                    viewModel.getForecasts(locationKey = locationKey, isMetric, language)
                 }
             }
         }
@@ -118,6 +140,15 @@ class LocationFragment : Fragment() {
         })
 
 
+    }
+
+
+    fun getLocationKey(): String {
+        if (locationKey != null && locationKey != "0") {
+            return locationKey.toString()
+        } else {
+            return viewModel.locationKeyLiveData.value.toString()
+        }
     }
 
 

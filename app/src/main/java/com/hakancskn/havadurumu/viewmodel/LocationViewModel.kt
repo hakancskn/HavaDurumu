@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.hakancskn.havadurumu.model.Forecasts
 import com.hakancskn.havadurumu.model.LocationKey
 import com.hakancskn.havadurumu.service.WeatherAPIService
+import com.hakancskn.havadurumu.util.isMetric
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -17,7 +18,7 @@ class LocationViewModel : BaseViewModel() {
     val locationError = MutableLiveData<Boolean>()
     val locationLoading = MutableLiveData<Boolean>()
 
-    val locationKeyLiveData = MutableLiveData<LocationKey>()
+    val locationKeyLiveData = MutableLiveData<String>()
     val forecastsLiveData = MutableLiveData<Forecasts>()
 
     fun getLocationKey(query: String) {
@@ -34,7 +35,7 @@ class LocationViewModel : BaseViewModel() {
 
                     override fun onSuccess(t: LocationKey) {
                         locationLoading.value = false
-                        locationKeyLiveData.value = t
+                        locationKeyLiveData.value = t.key
                     }
                 })
         )
@@ -42,10 +43,10 @@ class LocationViewModel : BaseViewModel() {
 
     }
 
-    fun getForecasts(locationKey: LocationKey) {
+    fun getForecasts(locationKey: String, isMetric: Boolean, language: String) {
         locationLoading.value = true
         disposable.add(
-            weatherAPIService.getForecasts(locationKey)
+            weatherAPIService.getForecasts(locationKey, isMetric, language)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<Forecasts>() {
@@ -64,26 +65,5 @@ class LocationViewModel : BaseViewModel() {
 
     }
 
-    fun getForecasts(locationKey: String) {
-        locationLoading.value = true
-        disposable.add(
-            weatherAPIService.getForecasts(locationKey)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<Forecasts>() {
-                    override fun onError(e: Throwable) {
-                        locationLoading.value = false
-                        locationError.value = true
-                    }
-
-                    override fun onSuccess(t: Forecasts) {
-                        locationLoading.value = false
-                        forecastsLiveData.value = t
-                    }
-                })
-        )
-
-
-    }
 
 }

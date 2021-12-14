@@ -45,14 +45,48 @@ fun saveData(context: Context, locationKeyList: ArrayList<AutoComplete>) {
 
 fun addSearchData(context: Context, serchItem: AutoComplete) {
     var locationKeyList = getLocationKeys(context)
-
     if (locationKeyList == null) {
         locationKeyList = arrayListOf()
     }
-    if (locationKeyList.size >= listSize) {
-        locationKeyList.removeAt(0)
+
+    val isSearch = locationKeyList?.toList()?.find {
+        it.cityKey == serchItem.cityKey
     }
-    locationKeyList.add(serchItem)
-    saveData(context, locationKeyList)
+    if (isSearch == null) {
+
+        if (locationKeyList.size >= listSize) {
+            locationKeyList.removeAt(0)
+        }
+        locationKeyList.add(serchItem)
+        saveData(context, locationKeyList)
+    }
 }
+
+fun isLanguageTr(context: Context): Boolean {
+    val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+    return sharedPreferences.getBoolean("language", false)
+}
+
+fun changeLanguage(context: Context) {
+    val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+
+    sharedPreferences.edit().putBoolean("language", !isLanguageTr(context)).apply()
+}
+
+
+fun isMetric(context: Context): Boolean {
+    val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+    return sharedPreferences.getBoolean("metric", false)
+}
+
+fun changeMetric(context: Context) {
+    val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+
+    sharedPreferences.edit().putBoolean("metric", !isMetric(context)).apply()
+}
+
 

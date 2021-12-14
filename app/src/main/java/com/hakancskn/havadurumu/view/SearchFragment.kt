@@ -60,8 +60,11 @@ class SearchFragment : Fragment() {
             }
 
         })
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
+        search_recyclerView.layoutManager = layoutManager
 
-        search_recyclerView.layoutManager = LinearLayoutManager(context)
         search_recyclerView.adapter = searchAdapter
 
     }

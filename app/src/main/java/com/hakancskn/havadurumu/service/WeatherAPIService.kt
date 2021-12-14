@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import com.hakancskn.havadurumu.model.AutoComplete
 import com.hakancskn.havadurumu.model.Forecasts
 import com.hakancskn.havadurumu.model.LocationKey
+import com.hakancskn.havadurumu.util.isMetric
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class WeatherAPIService {
     private val BASE_URL = "http://dataservice.accuweather.com/"
-    private val API_KEY = "LYe1ss69qycdWh64bIqNhA3Mgw7bBEhT"
+    private val API_KEY = "9DkFGK2PcnMy7rahJVRGZ6YEOrfjh97b"
 
     private var gson = GsonBuilder()
         .setLenient()
@@ -24,6 +25,7 @@ class WeatherAPIService {
         .build()
         .create(WeatherAPI::class.java)
 
+
     fun getAutoComplete(query: String): Single<List<AutoComplete>> {
         return api.getAutoComplete(apikey = API_KEY, query = query)
     }
@@ -32,12 +34,18 @@ class WeatherAPIService {
         return api.getLocationKeyForLocation(apikey = API_KEY, query = query)
     }
 
-    fun getForecasts(locationKey: LocationKey): Single<Forecasts> {
-        return api.get5DaysForecasts(apikey = API_KEY, locationKey = locationKey.key.toString(),language= "tr-tr")
-    }
 
-    fun getForecasts(locationKey:String):Single<Forecasts> {
-        return api.get5DaysForecasts(apikey = API_KEY, locationKey = locationKey,language= "tr-tr")
+    fun getForecasts(
+        locationKey: String,
+        isMetric: Boolean,
+        language: String
+    ): Single<Forecasts> {
+        return api.get5DaysForecasts(
+            apikey = API_KEY,
+            locationKey = locationKey,
+            language = language,
+            metric = isMetric
+        )
     }
 
 }

@@ -12,21 +12,23 @@ interface WeatherAPI {
 
     @GET("locations/v1/cities/autocomplete")
     fun getAutoComplete(
-        @Query("apikey") apikey:String = "",
-        @Query("q") query:String = ""
+        @Query("apikey") apikey: String = "",
+        @Query("q") query: String = ""
     ): Single<List<AutoComplete>>
+
     @GET("/locations/v1/cities/geoposition/search")
     fun getLocationKeyForLocation(
-        @Query("apikey") apikey:String = "",
-        @Query("q") query:String = ""
-    ):Single<LocationKey>
+        @Query("apikey") apikey: String = "",
+        @Query("q") query: String = ""
+    ): Single<LocationKey>
 
     @GET("/forecasts/v1/daily/5day/{key}")
     fun get5DaysForecasts(
-        @Path("key") locationKey: String ="",
-        @Query("apikey") apikey:String = "",
-        @Query("language") language:String = ""
-    ):Single<Forecasts>
+        @Path("key") locationKey: String = "",
+        @Query("apikey") apikey: String = "",
+        @Query("language") language: String = "",
+        @Query("metric") metric:Boolean = false
+    ): Single<Forecasts>
 
 
 }

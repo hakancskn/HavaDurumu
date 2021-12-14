@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Temperatur(
     @SerializedName("Value")
-    val value:Int?,
+    val value:Double?,
     @SerializedName("Unit")
     val unit:String?
 
